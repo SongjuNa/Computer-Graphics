@@ -2,6 +2,7 @@ int cols, rows;
 int scl = 20;
 int w = 2000;
 int h = 1600;
+PImage background;
 
 float flying = 0;
 
@@ -12,6 +13,8 @@ void setup() {
   cols = w / scl;
   rows = h / scl;
   terrain = new float[cols][rows];
+  background = loadImage("Hogwarts.jpg");
+  background.resize(600, 600);
 }
 
 void draw() {
@@ -26,13 +29,31 @@ void draw() {
     yoff += 0.2;
   }
 
-  background(0);
+  background(background);
   stroke(255);
   fill(0);
-  if (mousePressed) {
-    lights();
-  }
+  lights();
+ 
   translate(mouseX, mouseY);
+  noStroke();
+  fill(255);
+
+
+  rotateX(PI/3);
+  frameRate(1);
+  translate(-w/2, -h/2);
+
+  for (int y = 0; y < rows-1; y++) {
+    beginShape(TRIANGLE_STRIP);
+    for (int x = 0; x < cols; x++) {
+      fill(128+terrain[x][y], 128-terrain[x][y], 32+terrain[x][y]);
+      vertex(x*scl, y*scl, terrain[x][y]);
+      vertex(x*scl, (y+1)*scl, terrain[x][y+1]);
+      //rect (x*scl, y*scl, scl, scl);
+    }
+    endShape();
+  }
+}
   noStroke();
   fill(255);
 
